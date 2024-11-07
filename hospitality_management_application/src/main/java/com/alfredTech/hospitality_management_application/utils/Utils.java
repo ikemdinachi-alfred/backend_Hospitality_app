@@ -37,7 +37,31 @@ public class Utils {
         return userDTO;
     }
 
+
     public static RoomDTO mapRoomModelToRoomDTO(Room room) {
+        RoomDTO roomDTO = new RoomDTO();
+
+        roomDTO.setId(room.getId());
+        roomDTO.setRoomType(room.getRoomType());
+        roomDTO.setRoomPrice(room.getRoomPrice());
+        roomDTO.setRoomPhotoUrl(room.getRoomPhotoUrl());
+        roomDTO.setRoomDescription(room.getRoomDescription());
+        return roomDTO;
+    }
+
+    public static BookingDTO mapBookingModelToBookingDTO(Booking booking, boolean mapUser) {
+        BookingDTO bookingDTO = new BookingDTO();
+
+        bookingDTO.setId(booking.getId());
+        bookingDTO.setCheckInDate(booking.getCheckInDate());
+        bookingDTO.setCheckOutDate(booking.getCheckOutDate());
+        bookingDTO.setNumOfAdults(booking.getNumberOfAdult());
+        bookingDTO.setNumOfChildren(booking.getNumberOfChildren());
+        bookingDTO.setTotalNumOfGuest(bookingDTO.getTotalNumOfGuest());
+        bookingDTO.setBookingConfirmationCode(booking.getBookingConfirmationCode());
+        return bookingDTO;
+    }
+    public static RoomDTO mapRoomModelToRoomDTOPlusBookings(Room room) {
         if (room == null) {
             return null;
         }
@@ -48,22 +72,22 @@ public class Utils {
         roomDTO.setRoomPhotoUrl(room.getRoomPhotoUrl());
         roomDTO.setRoomDescription(room.getRoomDescription());
 
-        // Map each booking to BookingDTO using a traditional for loop
         List<BookingDTO> bookingDTOs = new ArrayList<>();
         if (room.getBookings() != null) {
             for (Booking booking : room.getBookings()) {
                 bookingDTOs.add(Utils.mapBookingModelToBookingDTO(booking, true));
             }
+
         }
-        roomDTO.setBookings(bookingDTOs);
+            roomDTO.setBookings(bookingDTOs);
+
 
         return roomDTO;
 
-
     }
-
-    public static BookingDTO mapBookingModelToBookingDTO(Booking booking, boolean mapUser) {
+        public static BookingDTO mapBookingModelToBookingDTOPlusBookedRooms(Booking booking, boolean mapUser) {
         BookingDTO bookingDTO = new BookingDTO();
+
         bookingDTO.setId(booking.getId());
         bookingDTO.setCheckInDate(booking.getCheckInDate());
         bookingDTO.setCheckOutDate(booking.getCheckOutDate());
@@ -103,7 +127,7 @@ public class Utils {
     }
 
     public static List<UserDTO> mapUseListModelToUserListDTO(List<User> users){
-      return users.stream().map(Utils::mapUserModelToUserDTO).collect(Collectors.toList());
+        return users.stream().map(Utils::mapUserModelToUserDTO).collect(Collectors.toList());
     }
 
     public static List<RoomDTO> mapRoomListModelToRoomListDTO(List<Room> rooms){
@@ -121,7 +145,5 @@ public class Utils {
 
         return bookingDTOs;
     }
-
-
 
 }
