@@ -17,7 +17,7 @@ public class Utils {
     private static final SecureRandom secureRandom = new SecureRandom();
 
 
-    private static String generateRandomConfirmationCode(int length) {
+    public static String generateRandomConfirmationCode(int length) {
         StringBuilder randomCode = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int randomInt = secureRandom.nextInt(ALPHANUMERIC_STRING.length());
