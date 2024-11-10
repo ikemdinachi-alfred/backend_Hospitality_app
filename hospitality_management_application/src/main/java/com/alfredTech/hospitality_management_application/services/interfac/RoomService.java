@@ -11,10 +11,10 @@ public interface RoomService {
    Response addNewRoom (AddNewRoomRequest addNewRoomRequest);
     List<String> getAllRoomType();
     Response getAllRoomTypes();
-    Response deleteAllRooms(Long roomId);
-    Response update(UpdateRoomRequest request);
+    Response updateRoom(Long roomId, UpdateRoomRequest request);
     Response getRoomById(Long roomId);
     Response getAvailableRoomsByDataAndType(LocalDate checkInDate, LocalDate checkOutDate,String roomType );
     Response allAvailableRooms();
-
+    Response getAllRooms();
+    Response deleteRoom(Long roomId);
 }

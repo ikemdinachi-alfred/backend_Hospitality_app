@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 public class UpdateRoomRequest {
-    private Long roomId;
     private String description;
     private String roomType;
     private BigDecimal roomPrice;

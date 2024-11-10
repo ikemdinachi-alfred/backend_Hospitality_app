@@ -8,9 +8,9 @@ public interface UserService {
     Response registerUser(User user);
     Response loginUser(LoginRequest loginRequest);
     Response getAllUsers();
-    Response getUserBookingHistory(String userId);
-    Response deleteUser(String userId);
-    Response getUserById(String userId);
+    Response getUserBookingHistory(Long userId);
+    Response deleteUser(Long userId);
+    Response getUserById(Long userId);
     Response getMyInfo(String email);
 
 }

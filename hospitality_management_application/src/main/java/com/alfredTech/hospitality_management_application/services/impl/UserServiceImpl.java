@@ -9,7 +9,7 @@ import com.alfredTech.hospitality_management_application.exception.OurException;
 import com.alfredTech.hospitality_management_application.services.interfac.UserService;
 import com.alfredTech.hospitality_management_application.utils.JWTUtils;
 import com.alfredTech.hospitality_management_application.utils.Utils;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,11 +18,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private  UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
     private JWTUtils jwtUtils;
 
 
@@ -92,16 +96,16 @@ public class UserServiceImpl implements UserService {
             response.setStatusCode(500);
             response.setMessage("Error getting all users " + e.getMessage());
         }
-        return null;
+        return response;
     }
 
     @Override
-    public Response getUserBookingHistory(String userId) {
+    public Response getUserBookingHistory(Long userId) {
         Response response = new Response();
 
 
         try {
-            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new OurException("User Not Found"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new OurException("User Not Found"));
             UserDTO userDTO = Utils.mapUserModelToUserDTOPlusUserBookingAndRoom(user);
             response.setStatusCode(200);
             response.setMessage("successful");
@@ -120,12 +124,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response deleteUser(String userId) {
+    public Response deleteUser(Long userId) {
         Response response = new Response();
 
         try {
-            userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new OurException("User Not Found"));
-            userRepository.deleteById(Long.valueOf(userId));
+            userRepository.findById(userId).orElseThrow(() -> new OurException("User Not Found"));
+            userRepository.deleteById(userId);
             response.setStatusCode(200);
             response.setMessage("successful");
 
@@ -142,11 +146,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response getUserById(String userId) {
+    public Response getUserById(Long userId) {
         Response response = new Response();
 
         try {
-            User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new OurException("User Not Found"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new OurException("User Not Found"));
             UserDTO userDTO = Utils.mapUserModelToUserDTO(user);
             response.setStatusCode(200);
             response.setMessage("successful");
