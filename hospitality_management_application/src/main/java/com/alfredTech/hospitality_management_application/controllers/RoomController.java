@@ -1,15 +1,14 @@
 package com.alfredTech.hospitality_management_application.controllers;
-
 import com.alfredTech.hospitality_management_application.dtos.reponse.Response;
-import com.alfredTech.hospitality_management_application.dtos.requests.AddNewRoomRequest;
-import com.alfredTech.hospitality_management_application.dtos.requests.UpdateRoomRequest;
 import com.alfredTech.hospitality_management_application.services.interfac.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,16 +21,21 @@ public class RoomController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> addNewRoom(@RequestBody AddNewRoomRequest request){
-     if (request.getPhoto() == null || request.getPhoto().isEmpty() ||request.getRoomType()== null
-     ||request.getRoomType().isBlank() || request.getRoomPrice()==null){
-         Response response = new Response();
-         response.setStatusCode(400);
-         response.setMessage("please provide values for all fields (photo, room Type, room Price)");
-         return ResponseEntity.status(response.getStatusCode()).body(response);
+    public ResponseEntity<Response> addNewRoom(
+            @RequestParam(value = "photo", required = false) MultipartFile photo,
+            @RequestParam(value = "roomType", required = false) String roomType,
+            @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
+            @RequestParam(value = "roomDescription", required = false) String roomDescription
+    ) {
+
+        if (photo == null || photo.isEmpty() || roomType == null || roomType.isBlank() || roomPrice == null || roomType.isBlank()) {
+            Response response = new Response();
+            response.setStatusCode(400);
+            response.setMessage("Please provide values for all fields(photo, roomType,roomPrice)");
+            return ResponseEntity.status(response.getStatusCode()).body(response);
         }
-     Response response = roomService.addNewRoom(request);
-     return ResponseEntity.status(response.getStatusCode()).body(response);
+        Response response = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
     @GetMapping("/all")
     public ResponseEntity<Response> getAllRooms(){
@@ -68,8 +72,14 @@ public class RoomController {
     @PostMapping("/update/{roomId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> updateRoom(@PathVariable Long roomId,
-                                               @RequestBody UpdateRoomRequest request){
-        Response response = roomService.updateRoom(roomId, request);
+                                               @RequestParam(value = "photo", required = false) MultipartFile photo,
+                                               @RequestParam(value = "roomType", required = false) String roomType,
+                                               @RequestParam(value = "roomPrice", required = false) BigDecimal roomPrice,
+                                               @RequestParam(value = "roomDescription", required = false) String roomDescription
+
+    ) {
+        Response response = roomService.updateRoom(roomId, roomDescription, roomType, roomPrice, photo);
+
         return ResponseEntity.status(response.getStatusCode()).body(response);
 
     }
