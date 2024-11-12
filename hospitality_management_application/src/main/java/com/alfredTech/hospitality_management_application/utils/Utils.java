@@ -57,7 +57,7 @@ public class Utils {
         bookingDTO.setCheckOutDate(booking.getCheckOutDate());
         bookingDTO.setNumOfAdults(booking.getNumberOfAdult());
         bookingDTO.setNumOfChildren(booking.getNumberOfChildren());
-        bookingDTO.setTotalNumOfGuest(bookingDTO.getTotalNumOfGuest());
+        bookingDTO.setTotalNumOfGuest(booking.getTotalNumberOfGuest());
         bookingDTO.setBookingConfirmationCode(booking.getBookingConfirmationCode());
         return bookingDTO;
     }
@@ -93,7 +93,7 @@ public class Utils {
         bookingDTO.setCheckOutDate(booking.getCheckOutDate());
         bookingDTO.setNumOfAdults(booking.getNumberOfAdult());
         bookingDTO.setNumOfChildren(booking.getNumberOfChildren());
-        bookingDTO.setTotalNumOfGuest(bookingDTO.getTotalNumOfGuest());
+        bookingDTO.setTotalNumOfGuest(booking.getTotalNumberOfGuest());
         bookingDTO.setBookingConfirmationCode(booking.getBookingConfirmationCode());
         if (mapUser) {
             bookingDTO.setUser(Utils.mapUserModelToUserDTO(booking.getUser()));

@@ -19,6 +19,7 @@ import java.util.List;
 
 @Service
 public class BookingServiceImpl implements BookingService {
+
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
@@ -27,26 +28,28 @@ public class BookingServiceImpl implements BookingService {
     private UserRepository userRepository;
 
 
-
     @Override
     public Response saveBooking(Long roomId, Long userId, Booking bookingRequest) {
+
         Response response = new Response();
-        try{
-            if (bookingRequest.getCheckInDate().isBefore(bookingRequest.getCheckOutDate())){
-                throw new IllegalArgumentException("Check Out Date should be before Check In Date");
+
+        try {
+            if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())) {
+                throw new IllegalArgumentException("Check in date must come after check out date");
             }
-            Room room = roomRepository.findById(roomId).orElseThrow(() -> new OurException("Room not found"));
-            User user = userRepository.findById(userId).orElseThrow(() -> new OurException("User not found"));
+            Room room = roomRepository.findById(roomId).orElseThrow(() -> new OurException("Room Not Found"));
+            User user = userRepository.findById(userId).orElseThrow(() -> new OurException("User Not Found"));
 
             List<Booking> existingBookings = room.getBookings();
 
-            if(!roomIsAvailable(bookingRequest,existingBookings)){
-                throw new OurException("Room not Available for selected Date range");
-
+            if (!roomIsAvailable(bookingRequest, existingBookings)) {
+                throw new OurException("Room not Available for selected date range");
             }
+
             bookingRequest.setRoom(room);
             bookingRequest.setUser(user);
             String bookingConfirmationCode = Utils.generateRandomConfirmationCode(10);
+            bookingRequest.setBookingConfirmationCode(bookingConfirmationCode);
             bookingRepository.save(bookingRequest);
             response.setStatusCode(200);
             response.setMessage("successful");
@@ -63,7 +66,10 @@ public class BookingServiceImpl implements BookingService {
         }
         return response;
 
-    }
+
+
+
+}
 
 
     @Override
@@ -71,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
      Response response = new Response();
      try {
          Booking booking = bookingRepository.findByBookingConfirmationCode(confirmationCode).orElseThrow(() -> new OurException("Booking not found"));
-         BookingDTO bookingDTO = Utils.mapBookingModelToBookingDTO(booking,true);
+         BookingDTO bookingDTO = Utils.mapBookingModelToBookingDTOPlusBookedRooms(booking,true);
          response.setStatusCode(200);
          response.setMessage("successful");
          response.setBooking(bookingDTO);

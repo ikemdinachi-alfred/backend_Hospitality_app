@@ -39,6 +39,16 @@ public class Booking {
         this.totalNumberOfGuest = this.numberOfAdult + this.numberOfChildren;
     }
 
+    public void setNumOfAdults(int numOfAdults) {
+        this.numberOfAdult = numOfAdults;
+        calculateTotalNumberOfGuest();
+    }
+
+    public void setNumOfChildren(int numOfChildren) {
+        this.numberOfChildren = numOfChildren;
+        calculateTotalNumberOfGuest();
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
